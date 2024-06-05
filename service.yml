@@ -1,0 +1,28 @@
+x-logging: &logging
+  driver: "json-file"
+  options:
+    max-size: "16m"
+    max-file: "16"
+
+services:
+  crushmydeck:
+    image: ghcr.io/${IMAGE_NAME}:latest
+    pull_policy: always
+
+    logging: *logging
+    restart: unless-stopped
+
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.crushmydeck-com.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.crushmydeck-com.entrypoints=https
+      - traefik.http.routers.crushmydeck-com.tls.certresolver=letsencrypt
+      - traefik.http.services.crushmydeck-com.loadbalancer.server.port=${APP_PORT}
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external:
+      name: traefik

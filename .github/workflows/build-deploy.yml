@@ -75,7 +75,7 @@ jobs:
           SSH_HOST: ${{ vars.HOST_PROD_IP }}
 
       - name: Upload docker compose file to the server
-        run: scp ./service.yml prod:${{ vars.HOST_PROD_SERVICE_PATH }}/crushmydeck.yml
+        run: scp ./service.yml prod:${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml
 
       - name: Run the app container
-        run: ssh prod docker compose -f ${{ vars.HOST_PROD_SERVICE_PATH }}/crushmydeck.yml up -d
+        run: ssh prod docker compose -f ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml up -d -e IMAGE_NAME=${{ env.IMAGE_NAME }} -e DOMAIN=${{ vars.DOMAIN }} -e APP_PORT=${{ vars.APP_PORT }}

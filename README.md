@@ -22,6 +22,8 @@ Variables:
 - vars.HOST_PROD_USER
 - vars.HOST_PROD_IP
 - vars.HOST_PROD_SERVICE_PATH
+- vars.DOMAIN
+- vars.APP_PORT
 
 ## Getting Started
 
@@ -42,4 +44,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+## Configuration
+
+1. Setup variables and secrets for GitHub Actions in the repository settings
+2. Copy .env file content to `secrets.ENV_FILE` that all that needed for the app configuration (and depends on your particular app based on this template)
 
