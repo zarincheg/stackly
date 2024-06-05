@@ -78,4 +78,4 @@ jobs:
         run: scp ./service.yml prod:${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml
 
       - name: Run the app container
-        run: ssh prod docker compose -f ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml up -d -e IMAGE_NAME=${{ env.IMAGE_NAME }} -e DOMAIN=${{ vars.DOMAIN }} -e APP_PORT=${{ vars.APP_PORT }}
+        run: ssh prod docker compose -f ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml -e IMAGE_NAME=${{ env.IMAGE_NAME }} -e DOMAIN=${{ vars.DOMAIN }} -e APP_PORT=${{ vars.APP_PORT }} up -d
