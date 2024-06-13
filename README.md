@@ -24,6 +24,7 @@ Variables:
 - vars.HOST_PROD_SERVICE_PATH
 - vars.DOMAIN
 - vars.APP_PORT
+- vars.ALIAS
 
 ## Getting Started
 

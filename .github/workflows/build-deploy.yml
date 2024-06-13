@@ -77,5 +77,11 @@ jobs:
       - name: Upload docker compose file to the server
         run: scp ./service.yml prod:${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml
 
+      - name: Create temporary file with env variable for Docker Compose
+        run: echo -e "DOMAIN=${{ vars.DOMAIN }}\nAPP_PORT=${{ vars.APP_PORT }}\nIMAGE_NAME=${{ env.IMAGE_NAME }}\nALIAS=${{ vars.ALIAS }}" > service.env
+
+      - name: Upload env file to the server
+        run: scp ./service.env prod:${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.env
+
       - name: Run the app container
-        run: ssh prod docker compose -f ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml up -d -e IMAGE_NAME=${{ env.IMAGE_NAME }} -e DOMAIN=${{ vars.DOMAIN }} -e APP_PORT=${{ vars.APP_PORT }}
+        run: ssh prod docker compose --env-file ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.env -f ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml up -d

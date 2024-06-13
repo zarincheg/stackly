@@ -5,19 +5,23 @@ x-logging: &logging
     max-file: "16"
 
 services:
-  crushmydeck:
+  nextapp:
+    container_name: ${ALIAS}
     image: ghcr.io/${IMAGE_NAME}:latest
     pull_policy: always
 
     logging: *logging
     restart: unless-stopped
 
+    ports:
+      - "${APP_PORT}:3000"
+
     labels:
       - traefik.enable=true
-      - traefik.http.routers.crushmydeck-com.rule=Host(`${DOMAIN}`)
-      - traefik.http.routers.crushmydeck-com.entrypoints=https
-      - traefik.http.routers.crushmydeck-com.tls.certresolver=letsencrypt
-      - traefik.http.services.crushmydeck-com.loadbalancer.server.port=${APP_PORT}
+      - traefik.http.routers.${ALIAS}.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.${ALIAS}.entrypoints=https
+      - traefik.http.routers.${ALIAS}.tls.certresolver=letsencrypt
+      - traefik.http.services.${ALIAS}.loadbalancer.server.port=${APP_PORT}
 
     networks:
       - traefik
