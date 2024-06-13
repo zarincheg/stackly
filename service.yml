@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
 
     ports:
-      - "${APP_PORT}:${APP_PORT}"
+      - "${APP_PORT}:3000"
 
     labels:
       - traefik.enable=true
