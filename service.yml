@@ -13,6 +13,9 @@ services:
     logging: *logging
     restart: unless-stopped
 
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+
     labels:
       - traefik.enable=true
       - traefik.http.routers.${ALIAS}.rule=Host(`${DOMAIN}`)
