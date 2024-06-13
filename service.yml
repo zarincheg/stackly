@@ -5,7 +5,8 @@ x-logging: &logging
     max-file: "16"
 
 services:
-  crushmydeck:
+  nextapp:
+    container_name: ${ALIAS}
     image: ghcr.io/${IMAGE_NAME}:latest
     pull_policy: always
 
