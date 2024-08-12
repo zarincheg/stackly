@@ -1,6 +1,6 @@
 {
-  "name": "hwonplate",
-  "version": "0.1.0",
+  "name": "stackly",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "next": "14.2.3",
+    "next-auth": "^5.0.0-beta.20",
     "pg": "^8.11.5",
     "react": "^18",
     "react-dom": "^18",
