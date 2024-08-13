@@ -12,6 +12,8 @@ services:
 
     logging: *logging
     restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
     ports:
       - "${APP_PORT}:3000"
@@ -25,8 +27,18 @@ services:
 
     networks:
       - traefik
+      - database
+    
+    db:
+      image: postgres
+      container_name: stackly-db
+      restart: always
+      environment:
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_DB: stackly
 
 networks:
+  database:
   traefik:
     external:
       name: traefik

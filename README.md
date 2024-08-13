@@ -14,9 +14,10 @@
 
 ### Building variables
 Secrets:
-- secrets.ENV_FILE
+- secrets.ENV_FILE - should contain the full content for the .env file according to .env.local.example
 - secrets.GITHUB_TOKEN
 - secrets.DEPLOY_SSH_SECRET_KEY
+- secrets.POSTGRES_PASSWORD - password for the PostgreSQL default user to launch the database service
 
 Variables:
 - vars.HOST_PROD_USER
