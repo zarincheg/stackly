@@ -82,8 +82,9 @@ jobs:
           DOMAIN=${{ vars.DOMAIN }}\n
           APP_PORT=${{ vars.APP_PORT }}\n
           IMAGE_NAME=${{ env.IMAGE_NAME }}\n
-          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-          ALIAS=${{ vars.ALIAS }}" > service.env
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}\n
+          ALIAS=${{ vars.ALIAS }}
+          " > service.env
 
       - name: Upload env file to the server
         run: scp ./service.env prod:${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.env
