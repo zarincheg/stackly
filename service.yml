@@ -4,6 +4,9 @@ x-logging: &logging
     max-size: "16m"
     max-file: "16"
 
+include: 
+  - traefik.yml
+
 services:
   nextapp:
     container_name: ${ALIAS}

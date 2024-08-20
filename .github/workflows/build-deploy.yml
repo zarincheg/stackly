@@ -1,7 +1,7 @@
 name: Build and deploy the app
 
-# on: workflow_dispatch
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*'
@@ -85,6 +85,7 @@ jobs:
           IMAGE_NAME=${{ env.IMAGE_NAME }}\n
           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}\n
           ALIAS=${{ vars.ALIAS }}
+          LE_EMAIL=${{ vars.LE_EMAIL }}
           " > service.env
 
       - name: Upload env file to the server

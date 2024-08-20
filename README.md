@@ -51,6 +51,7 @@ Setup variables in the repository settings:
 4. `DOMAIN` - app domain name
 5. `APP_PORT` - an internal port that will be used by Traefik
 6. `ALIAS` - app alias for container name and other internal use
+7. `LE_EMAIL` - an email address for the Let's Encrypt SSL certificate that will be used by Traefik
 
 #### Configure secrets
 For deployment, you should put all the contents of the `.env` file into the `ENV_FILE` secret variable for GitHub Actions.
