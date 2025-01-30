@@ -1,0 +1,36 @@
+x-logging: &logging
+  driver: "json-file"
+  options:
+    max-size: "16m"
+    max-file: "16"
+
+services:
+  app-stackly:
+    container_name: stackly-dev
+    build: .
+    pull_policy: always
+
+    logging: *logging
+    restart: unless-stopped
+
+    ports:
+      - "3000:3000"
+
+    networks:
+      - stackly-database
+    
+  db-stackly:
+    image: postgres
+    container_name: stackly-db-dev
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: stackly
+    
+    networks:
+      - stackly-database
+
+networks:
+  stackly-database:
+    name: stackly-database

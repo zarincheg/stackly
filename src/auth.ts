@@ -1,6 +1,8 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import type { Provider } from "next-auth/providers"
+import { TypeORMAdapter } from "@auth/typeorm-adapter"
+import { connection } from "./db/config"
 
 const providers: Provider[] = [
     Google
@@ -16,8 +18,19 @@ export const providerMap = providers.map((provider) => {
 })
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+    adapter: TypeORMAdapter(connection),
     providers: [Google],
+    trustHost: true,
     pages: {
         signIn: "/signin",
     },
+    callbacks: {
+        session({ session, user }) {
+            if (session.user) {
+                session.user.id = user.id;
+                session.user.image = user.image;
+            }
+            return session;
+        }
+    }
 })
