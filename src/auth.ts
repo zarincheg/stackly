@@ -1,8 +1,8 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import type { Provider } from "next-auth/providers"
-import { TypeORMAdapter } from "@auth/typeorm-adapter"
-import { connection } from "./db/config"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma } from "@/prisma"
 
 const providers: Provider[] = [
     Google
@@ -18,7 +18,7 @@ export const providerMap = providers.map((provider) => {
 })
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-    adapter: TypeORMAdapter(connection),
+    adapter: PrismaAdapter(prisma),
     providers: [Google],
     trustHost: true,
     pages: {
