@@ -5,8 +5,58 @@ x-logging: &logging
     max-file: "16"
 
 services:
-  app-stackly:
-    container_name: stackly-dev
+  stackly-postgres:
+    image: postgres
+    container_name: stackly-postgres
+    hostname: stackly-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: stackly1234
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+    
+    ports:
+      - "5433:5432"
+    
+    networks:
+      - stackly-network
+
+    volumes:
+      - stackly-postgres-data:/var/lib/postgresql
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  db-init-migrate:
+    image: node:22-alpine
+    container_name: db-init-migrate
+    restart: always
+    command: npx prisma migrate dev --name init --schema=/app/prisma/schema.prisma
+    environment:
+      DATABASE_URL: postgresql://postgres:test@stackly-postgres:5432/stackly?schema=public
+    depends_on:
+      stackly-postgres:
+        condition: service_healthy
+    
+    profiles:
+      - manual
+    
+    volumes:
+      - ./prisma:/app/prisma
+
+    networks:
+      - stackly-network
+
+  stackly-app:
+    container_name: stackly-app
     build: .
     pull_policy: always
 
@@ -16,21 +66,17 @@ services:
     ports:
       - "3000:3000"
 
+    depends_on:
+      stackly-postgres:
+        condition: service_healthy
+
     networks:
-      - stackly-database
-    
-  db-stackly:
-    image: postgres
-    container_name: stackly-db-dev
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: stackly
-    
-    networks:
-      - stackly-database
+      - stackly-network
+
+volumes:
+  stackly-postgres-data:
+    name: stackly-postgres-data
 
 networks:
-  stackly-database:
-    name: stackly-database
+  stackly-network:
+    name: stackly-network
