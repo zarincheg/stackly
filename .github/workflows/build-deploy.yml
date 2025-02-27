@@ -11,7 +11,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-image:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -47,10 +47,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-  server-deploy:
-    needs: build-and-push-image
+  
+  configuration:
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Checkout into main
@@ -59,37 +59,35 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Configure SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/prod.key
-          chmod 600 ~/.ssh/prod.key
-          cat >>~/.ssh/config <<END
-          Host prod
-            HostName $SSH_HOST
-            User $SSH_USER
-            IdentityFile ~/.ssh/prod.key
-            StrictHostKeyChecking no
-          END
-        env:
-          SSH_USER: ${{ vars.HOST_PROD_USER }}
-          SSH_KEY: ${{ secrets.DEPLOY_SSH_SECRET_KEY }}
-          SSH_HOST: ${{ vars.HOST_PROD_IP }}
+        uses: ./.github/actions/ssh.yml
+        with:
+          ssh_user: ${{ vars.HOST_PROD_USER }}
+          ssh_key: ${{ secrets.DEPLOY_SSH_SECRET_KEY }}
+          ssh_host: ${{ vars.HOST_PROD_IP }}
 
-      - name: Upload docker compose file to the server
-        run: scp ./service.yml prod:${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml
+      - name: Create and upload ENV file and docker compose file to the server
+        uses: ./.github/actions/envs.yml
+        with:
+          domain: ${{ vars.DOMAIN }}
+          app_port: ${{ vars.APP_PORT }}
+          image_name: ${{ env.IMAGE_NAME }}
+          postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
+          alias: ${{ vars.ALIAS }}
+          le_email: ${{ vars.LE_EMAIL }}
+          host_prod_service_path: ${{ vars.HOST_PROD_SERVICE_PATH }}
+  
+  db-migration:
+    runs-on: ubuntu-latest
+    needs: configuration
 
-      - name: Create temporary file with env variable for Docker Compose
-        run: echo -e "
-          DOMAIN=${{ vars.DOMAIN }}\n
-          APP_PORT=${{ vars.APP_PORT }}\n
-          IMAGE_NAME=${{ env.IMAGE_NAME }}\n
-          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}\n
-          ALIAS=${{ vars.ALIAS }}
-          LE_EMAIL=${{ vars.LE_EMAIL }}
-          " > service.env
+    steps:
+      - name: Run the db migration
+        run: ssh prod docker compose run --rm db-init-migrate
 
-      - name: Upload env file to the server
-        run: scp ./service.env prod:${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.env
+  deploy:
+    runs-on: ubuntu-latest
+    needs: db-migration
 
+    steps:
       - name: Run the app container
         run: ssh prod docker compose --env-file ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.env -f ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml up -d

@@ -1,0 +1,56 @@
+name: "Environment Variables for Docker Compose"
+description: "Create a temporary file with environment variables for Docker Compose and upload it to the server along with the docker compose file"
+
+inputs:
+  domain:
+    description: "Application domain name"
+    required: true
+  app_port:
+    description: "Application port"
+    required: true      
+  image_name:
+    description: "Docker image name"
+    required: true
+  postgres_password:
+    description: "PostgresSQL password"
+    required: true
+  alias:
+    description: "Alias for the service name"
+    required: true
+  le_email:
+    description: "Let's Encrypt email"
+    required: true
+  host_prod_service_path:
+    description: "Path to the service on the production host (where docker compose file is located)"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Create environment file
+      env:
+        DOMAIN: ${{ inputs.domain }}
+        APP_PORT: ${{ inputs.app_port }}
+        IMAGE_NAME: ${{ inputs.image_name }}
+        POSTGRES_PASSWORD: ${{ inputs.postgres_password }}
+        ALIAS: ${{ inputs.alias }}
+        LE_EMAIL: ${{ inputs.le_email }}
+      run: echo -e "
+          DOMAIN=${{ DOMAIN }}\n
+          APP_PORT=${{ APP_PORT }}\n
+          IMAGE_NAME=${{ IMAGE_NAME }}\n
+          POSTGRES_PASSWORD=${{ POSTGRES_PASSWORD }}\n
+          ALIAS=${{ ALIAS }}\n
+          LE_EMAIL=${{ LE_EMAIL }}" > service.env
+
+    - name: Upload environment file to the server
+      env:
+        HOST_PROD_SERVICE_PATH: ${{ inputs.host_prod_service_path }}
+        DOMAIN: ${{ inputs.domain }}
+      run: scp ./service.env prod:${{ HOST_PROD_SERVICE_PATH }}/${{ DOMAIN }}.env
+    
+    - name: Upload docker compose file to the server
+      env:
+        HOST_PROD_SERVICE_PATH: ${{ inputs.host_prod_service_path }}
+        DOMAIN: ${{ inputs.domain }}
+      run: scp ./docker-compose.yml prod:${{ HOST_PROD_SERVICE_PATH }}/${{ DOMAIN }}.yml

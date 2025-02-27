@@ -1,0 +1,34 @@
+name: "SSH Configuration"
+description: "Configure SSH access to the server"
+
+inputs:
+  ssh_host:
+    description: "SSH host"
+    required: true
+  ssh_user:
+    description: "SSH user"
+    required: true
+  ssh_key:
+    description: "SSH key"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Create SSH config file
+      env:
+        SSH_HOST: ${{ inputs.ssh_host }}
+        SSH_USER: ${{ inputs.ssh_user }}
+        SSH_KEY: ${{ inputs.ssh_key }}
+
+      run: |
+        mkdir -p ~/.ssh/
+        echo "$SSH_KEY" > ~/.ssh/prod.key
+        chmod 600 ~/.ssh/prod.key
+        cat >>~/.ssh/config <<END
+        Host prod
+          HostName $SSH_HOST
+          User $SSH_USER
+          IdentityFile ~/.ssh/prod.key
+          StrictHostKeyChecking no
+        END
