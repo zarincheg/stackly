@@ -28,6 +28,7 @@ runs:
   using: "composite"
   steps:
     - name: Create environment file
+      shell: bash
       env:
         DOMAIN: ${{ inputs.domain }}
         APP_PORT: ${{ inputs.app_port }}
@@ -44,12 +45,14 @@ runs:
           LE_EMAIL=${{ LE_EMAIL }}" > service.env
 
     - name: Upload environment file to the server
+      shell: bash
       env:
         HOST_PROD_SERVICE_PATH: ${{ inputs.host_prod_service_path }}
         DOMAIN: ${{ inputs.domain }}
       run: scp ./service.env prod:${{ HOST_PROD_SERVICE_PATH }}/${{ DOMAIN }}.env
     
     - name: Upload docker compose file to the server
+      shell: bash
       env:
         HOST_PROD_SERVICE_PATH: ${{ inputs.host_prod_service_path }}
         DOMAIN: ${{ inputs.domain }}

@@ -59,14 +59,14 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Configure SSH
-        uses: ./.github/actions/ssh.yml
+        uses: ./.github/actions/ssh
         with:
           ssh_user: ${{ vars.HOST_PROD_USER }}
           ssh_key: ${{ secrets.DEPLOY_SSH_SECRET_KEY }}
           ssh_host: ${{ vars.HOST_PROD_IP }}
 
       - name: Create and upload ENV file and docker compose file to the server
-        uses: ./.github/actions/envs.yml
+        uses: ./.github/actions/docker-compose-config
         with:
           domain: ${{ vars.DOMAIN }}
           app_port: ${{ vars.APP_PORT }}

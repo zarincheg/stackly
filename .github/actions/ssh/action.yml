@@ -16,6 +16,7 @@ runs:
   using: "composite"
   steps:
     - name: Create SSH config file
+      shell: bash
       env:
         SSH_HOST: ${{ inputs.ssh_host }}
         SSH_USER: ${{ inputs.ssh_user }}
