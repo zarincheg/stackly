@@ -38,13 +38,6 @@
   dependencies:
     "@auth/core" "0.37.4"
 
-"@auth/typeorm-adapter@^2.7.4":
-  version "2.7.4"
-  resolved "https://registry.yarnpkg.com/@auth/typeorm-adapter/-/typeorm-adapter-2.7.4.tgz#b50f99925a282ca179567c1365485c09aafe2080"
-  integrity sha512-XFVEmbBHHPMp0/7L69GwakoPln30/0VSgTtjeC3R4Ws4ydjZYRGRLNChfAxFNyphncaXy0XWNkXGh5IoQux6Rw==
-  dependencies:
-    "@auth/core" "0.37.4"
-
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
