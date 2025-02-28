@@ -81,8 +81,15 @@ jobs:
     needs: configuration
 
     steps:
+      - name: Configure SSH
+        uses: ./.github/actions/ssh
+        with:
+          ssh_user: ${{ vars.HOST_PROD_USER }}
+          ssh_key: ${{ secrets.DEPLOY_SSH_SECRET_KEY }}
+          ssh_host: ${{ vars.HOST_PROD_IP }}
+
       - name: Run the db migration
-        run: ssh prod docker compose run --rm db-init-migrate
+        run: ssh prod docker compose run --env-file ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.env -f ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml --rm db-init-migrate
 
   deploy:
     runs-on: ubuntu-latest
