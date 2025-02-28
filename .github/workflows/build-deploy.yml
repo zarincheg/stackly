@@ -81,6 +81,11 @@ jobs:
     needs: configuration
 
     steps:
+      - name: Checkout into main
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
       - name: Configure SSH
         uses: ./.github/actions/ssh
         with:
