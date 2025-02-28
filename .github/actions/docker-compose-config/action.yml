@@ -37,23 +37,23 @@ runs:
         ALIAS: ${{ inputs.alias }}
         LE_EMAIL: ${{ inputs.le_email }}
       run: echo -e "
-          DOMAIN=${{ DOMAIN }}\n
-          APP_PORT=${{ APP_PORT }}\n
-          IMAGE_NAME=${{ IMAGE_NAME }}\n
-          POSTGRES_PASSWORD=${{ POSTGRES_PASSWORD }}\n
-          ALIAS=${{ ALIAS }}\n
-          LE_EMAIL=${{ LE_EMAIL }}" > service.env
+          DOMAIN=$DOMAIN\n
+          APP_PORT=$APP_PORT\n
+          IMAGE_NAME=$IMAGE_NAME\n
+          POSTGRES_PASSWORD=$POSTGRES_PASSWORD\n
+          ALIAS=$ALIAS\n
+          LE_EMAIL=$LE_EMAIL" > service.env
 
     - name: Upload environment file to the server
       shell: bash
       env:
         HOST_PROD_SERVICE_PATH: ${{ inputs.host_prod_service_path }}
         DOMAIN: ${{ inputs.domain }}
-      run: scp ./service.env prod:${{ HOST_PROD_SERVICE_PATH }}/${{ DOMAIN }}.env
+      run: scp ./service.env prod:$HOST_PROD_SERVICE_PATH/$DOMAIN.env
     
     - name: Upload docker compose file to the server
       shell: bash
       env:
         HOST_PROD_SERVICE_PATH: ${{ inputs.host_prod_service_path }}
         DOMAIN: ${{ inputs.domain }}
-      run: scp ./docker-compose.yml prod:${{ HOST_PROD_SERVICE_PATH }}/${{ DOMAIN }}.yml
+      run: scp ./docker-compose.yml prod:$HOST_PROD_SERVICE_PATH/$DOMAIN.yml
