@@ -1,13 +1,11 @@
-version: "3.5"
-
 x-logging: &logging
   driver: "json-file"
   options:
     max-size: "16m"
     max-file: "16"
 
-include: 
-  - docker-compose-traefik.yml
+#include: TODO: configure traefik launch with an optional service launch in case of traefik is running
+#  - docker-compose-traefik.yml
 services:
   stackly-postgres:
     image: postgres
