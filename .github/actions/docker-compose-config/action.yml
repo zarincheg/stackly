@@ -56,4 +56,4 @@ runs:
       env:
         HOST_PROD_SERVICE_PATH: ${{ inputs.host_prod_service_path }}
         DOMAIN: ${{ inputs.domain }}
-      run: scp ./docker-compose.yml prod:$HOST_PROD_SERVICE_PATH/$DOMAIN.yml
+      run: scp ./docker-compose.yml prod:$HOST_PROD_SERVICE_PATH/$DOMAIN.yml && scp ./docker-compose-traefik.yml prod:$HOST_PROD_SERVICE_PATH/docker-compose-traefik.yml
