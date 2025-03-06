@@ -75,6 +75,9 @@ jobs:
           alias: ${{ vars.ALIAS }}
           le_email: ${{ vars.LE_EMAIL }}
           host_prod_service_path: ${{ vars.HOST_PROD_SERVICE_PATH }}
+      
+      - name: Upload Prisma schema to the server
+        run: scp ./prisma prod:${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}/prisma
   
   db-migration:
     runs-on: ubuntu-latest

@@ -51,7 +51,7 @@ services:
       - manual
     
     volumes:
-      - ./prisma:/app/prisma # TODO: copy Prisma schema from repository to the host
+      - ./${DOMAIN}/prisma:/app/prisma # TODO: copy Prisma schema from repository to the host
 
     networks:
       - stackly-network
