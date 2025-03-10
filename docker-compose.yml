@@ -74,6 +74,7 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@stackly-postgres:5432/${ALIAS}?schema=public
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      HOSTNAME: "0.0.0.0"
     
     labels:
       - traefik.enable=true
