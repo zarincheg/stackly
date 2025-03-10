@@ -96,8 +96,10 @@ jobs:
           ssh_key: ${{ secrets.DEPLOY_SSH_SECRET_KEY }}
           ssh_host: ${{ vars.HOST_PROD_IP }}
 
-      - name: Run the db migration
-        run: ssh prod docker compose --env-file ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.env -f ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml run --rm db-init-migrate
+      - name: Create database and run migrations
+        run: |
+          ssh prod 'docker compose --env-file ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.env -f ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml exec -T stackly-postgres psql -U postgres -c "CREATE DATABASE IF NOT EXISTS ${{ vars.ALIAS }};"'
+          ssh prod 'docker compose --env-file ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.env -f ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml run --rm db-init-migrate'
 
   deploy:
     runs-on: ubuntu-latest
