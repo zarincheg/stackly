@@ -40,9 +40,9 @@ services:
     image: node:22-alpine
     container_name: db-init-migrate
     restart: always
-    command: npx prisma migrate dev --name init --schema=/app/prisma/schema.prisma # TODO: copy Prisma schema from repository to the host
+    command: npx prisma migrate deploy --schema=/app/prisma/schema.prisma
     environment:
-      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@stackly-postgres:5432/stackly?schema=public # TODO: change to the actual database name from the env file
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@stackly-postgres:5432/${ALIAS}?schema=public
     depends_on:
       stackly-postgres:
         condition: service_healthy
@@ -51,7 +51,7 @@ services:
       - manual
     
     volumes:
-      - ./${DOMAIN}/prisma:/app/prisma # TODO: copy Prisma schema from repository to the host
+      - ./${DOMAIN}/prisma:/app/prisma
 
     networks:
       - stackly-network
