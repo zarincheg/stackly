@@ -13,7 +13,7 @@ services:
     hostname: stackly-postgres
     restart: always
     environment:
-      POSTGRES_DB: stackly # TODO: change to the actual database name from the env file
+      POSTGRES_DB: ${ALIAS}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     
     ports:
