@@ -106,5 +106,17 @@ jobs:
     needs: db-migration
 
     steps:
+      - name: Checkout into main
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Configure SSH
+        uses: ./.github/actions/ssh
+        with:
+          ssh_user: ${{ vars.HOST_PROD_USER }}
+          ssh_key: ${{ secrets.DEPLOY_SSH_SECRET_KEY }}
+          ssh_host: ${{ vars.HOST_PROD_IP }}
+
       - name: Run the app container
         run: ssh prod docker compose --env-file ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.env -f ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}.yml up -d
