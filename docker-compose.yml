@@ -58,7 +58,7 @@ services:
 
   stackly-app:
     container_name: ${ALIAS}
-    image: ghcr.io/${IMAGE_NAME}:latest
+    image: ghcr.io/${IMAGE_NAME}:${REF_NAME}
     pull_policy: always
 
     logging: *logging

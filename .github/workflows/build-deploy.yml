@@ -78,6 +78,10 @@ jobs:
       
       - name: Upload Prisma schema to the server
         run: ssh prod mkdir -p ${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }} && scp -r ./prisma prod:${{ vars.HOST_PROD_SERVICE_PATH }}/${{ vars.DOMAIN }}/prisma
+
+      #- name: Setup Docker authentication on server @TODO: add this step back to ensure authentication on the registry
+      #  run: |
+      #    ssh prod "echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin"
   
   db-migration:
     runs-on: ubuntu-latest

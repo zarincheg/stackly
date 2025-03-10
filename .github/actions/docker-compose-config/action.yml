@@ -33,6 +33,7 @@ runs:
         DOMAIN: ${{ inputs.domain }}
         APP_PORT: ${{ inputs.app_port }}
         IMAGE_NAME: ${{ inputs.image_name }}
+        REF_NAME: ${{ github.ref_name }}
         POSTGRES_PASSWORD: ${{ inputs.postgres_password }}
         ALIAS: ${{ inputs.alias }}
         LE_EMAIL: ${{ inputs.le_email }}
@@ -40,6 +41,7 @@ runs:
           DOMAIN=$DOMAIN\n
           APP_PORT=$APP_PORT\n
           IMAGE_NAME=$IMAGE_NAME\n
+          REF_NAME=$REF_NAME\n
           POSTGRES_PASSWORD=$POSTGRES_PASSWORD\n
           ALIAS=$ALIAS\n
           LE_EMAIL=$LE_EMAIL" > service.env
