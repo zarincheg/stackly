@@ -1,4 +1,4 @@
-![stackly (1)](https://github.com/user-attachments/assets/43561008-d22f-4ec7-b4e8-6bbbf09603a3)
+![stackly_v2](https://github.com/user-attachments/assets/789bb590-48dc-4b4c-8abe-d375335b49fc)
 
 ## Stack Out-of-the-Box
 - TypeScript
