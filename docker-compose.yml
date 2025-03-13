@@ -74,18 +74,22 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@stackly-postgres:5432/${ALIAS}?schema=public
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      HOST: "0.0.0.0"
     
     labels:
       - traefik.enable=true
       - traefik.http.routers.${ALIAS}.rule=Host(`${DOMAIN}`)
       - traefik.http.routers.${ALIAS}.entrypoints=https
       - traefik.http.routers.${ALIAS}.tls.certresolver=letsencrypt
-      - traefik.http.services.${ALIAS}.loadbalancer.server.port=${APP_PORT}
+      - traefik.http.services.${ALIAS}.loadbalancer.server.port=3000
       - traefik.docker.network=traefik
+      - traefik.http.services.${ALIAS}.loadbalancer.passhostheader=true
 
     networks:
-      - stackly-network
-      - traefik
+      traefik:
+        priority: 1000
+      stackly-network:
+        priority: 1
 
 volumes:
   stackly-postgres-data:
