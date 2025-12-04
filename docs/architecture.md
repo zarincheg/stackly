@@ -54,9 +54,24 @@ The application is built using Next.js with the App Router paradigm:
 ## Authentication
 
 * **Provider:** NextAuth v5 (`next-auth`) handles user authentication, configured in `src/auth.ts` and the `/api/auth/[...nextauth]/route.ts` handler.
-* **Strategy:** Pre-configured with Google OAuth. Additional providers can be added easily.
-* **Session Management:** NextAuth manages user sessions. The `auth()` helper provides session data in Server Components and API routes.
+* **Strategies:** 
+  - **Google OAuth** - Pre-configured social login
+  - **Email/Password** - Credentials-based authentication with password hashing (bcrypt)
+  - **Email Verification** - Resend integration for email verification
+* **Session Management:** JWT-based sessions for credentials compatibility. The `auth()` helper provides session data in Server Components and API routes.
 * **Middleware:** Route protection is handled via `middleware.ts` with configurable matchers.
+
+### Email/Password Authentication
+
+The boilerplate includes a complete email/password authentication system:
+
+* **Registration:** `/api/auth/register` endpoint creates users with hashed passwords
+* **Sign In:** Credentials provider validates email/password combinations
+* **Email Verification:** Resend provider sends verification emails automatically
+* **UI Components:** Modern sign in/up forms in `src/components/auth/`
+* **Validation:** Zod schemas for form validation in `src/lib/auth/validation.ts`
+
+See `docs/email-auth-setup.md` for detailed setup instructions.
 
 ## Route Protection
 
@@ -95,9 +110,11 @@ The application uses a unified state management approach:
 |-----------|---------|
 | `src/app/` | Core routing, page components, async layouts, and API routes |
 | `src/components/` | Reusable React UI components |
+| `src/components/auth/` | Authentication UI components (AuthTabs, EmailPasswordForm) |
 | `src/components/providers/` | Context providers and store initializers |
 | `src/store/` | Zustand global state management |
 | `src/lib/` | Utility functions and configurations |
+| `src/lib/auth/` | Auth utilities (password hashing, validation schemas) |
 | `src/lib/utils/` | Common utility functions (`cn`, `formatDate`, etc.) |
 | `src/lib/constants/` | Application-wide constants |
 | `src/prisma.ts` | Prisma client instantiation |

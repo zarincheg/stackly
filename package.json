@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
+    "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-pg": "^7.1.0",
     "@prisma/client": "7",
+    "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "lucide-react": "^0.555.0",
     "next": "16.0.7",
@@ -22,10 +24,14 @@
     "pg": "^8.13.1",
     "react": "19.2.1",
     "react-dom": "19.2.1",
+    "react-hook-form": "^7.68.0",
+    "resend": "^6.5.2",
     "tailwind-merge": "^3.4.0",
+    "zod": "^4.1.13",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
     "@types/node": "^18",
     "@types/pg": "^8.11.10",
     "@types/react": "19.2.7",
