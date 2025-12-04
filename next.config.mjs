@@ -12,7 +12,8 @@ const nextConfig = {
 	images: {
 		domains: ['lh3.googleusercontent.com'],
 	},
-	webpack: (config, { isServer }) => {
+	turbopack: {},
+	/* webpack: (config, { isServer }) => {
 		config.resolve.fallback = {
 			...config.resolve.fallback,
 			"pg-native": false,
@@ -43,7 +44,7 @@ const nextConfig = {
 		}
 
 		return config;
-	},
+	}, */
 };
 
 export default nextConfig;
