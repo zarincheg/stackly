@@ -10,7 +10,12 @@ const nextConfig = {
 		maxBodySize: 10 * 1024 * 1024,
 	},
 	images: {
-		domains: ['lh3.googleusercontent.com'],
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "lh3.googleusercontent.com",
+			},
+		],
 	},
 	turbopack: {},
 	/* webpack: (config, { isServer }) => {
