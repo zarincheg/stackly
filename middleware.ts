@@ -2,6 +2,12 @@ import { auth } from "@/auth"
 import { NextResponse } from "next/server"
 
 /**
+ * Use Node.js runtime instead of Edge runtime
+ * Required because Prisma client uses Node.js-specific APIs
+ */
+export const runtime = "nodejs"
+
+/**
  * NextAuth middleware for route protection
  *
  * This middleware:
