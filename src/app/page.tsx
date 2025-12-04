@@ -1,115 +1,130 @@
-import User from "@/components/User";
-import Image from "next/image";
+import Link from "next/link"
+import { auth } from "@/auth"
+import { ArrowRight, Layers, Shield, Zap } from "lucide-react"
+import { APP_NAME } from "@/lib/constants"
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+/**
+ * Feature card component
+ */
+function FeatureCard({
+    icon: Icon,
+    title,
+    description,
+}: {
+    icon: React.ComponentType<{ className?: string }>
+    title: string
+    description: string
+}) {
+    return (
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+            <div className="mb-4 inline-flex rounded-lg bg-slate-100 p-3">
+                <Icon className="h-6 w-6 text-slate-700" />
+            </div>
+            <h3 className="mb-2 text-lg font-semibold text-slate-900">{title}</h3>
+            <p className="text-sm text-slate-600">{description}</p>
         </div>
-      </div>
+    )
+}
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-      <User />
+export default async function HomePage() {
+    const session = await auth()
+    const isAuthenticated = !!session?.user
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+    return (
+        <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+            {/* Header */}
+            <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
+                <div className="container mx-auto flex items-center justify-between px-6 py-4">
+                    <div className="flex items-center gap-2">
+                        <Layers className="h-6 w-6 text-slate-700" />
+                        <span className="text-xl font-bold text-slate-900">
+                            {APP_NAME}
+                        </span>
+                    </div>
+                    <nav>
+                        {isAuthenticated ? (
+                            <Link
+                                href="/dashboard"
+                                className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-800"
+                            >
+                                Dashboard
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
+                        ) : (
+                            <Link
+                                href="/signin"
+                                className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-800"
+                            >
+                                Sign In
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
+                        )}
+                    </nav>
+                </div>
+            </header>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+            {/* Hero Section */}
+            <section className="container mx-auto px-6 py-24 text-center">
+                <h1 className="mb-6 text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl">
+                    Build faster with{" "}
+                    <span className="text-slate-600">{APP_NAME}</span>
+                </h1>
+                <p className="mx-auto mb-10 max-w-2xl text-lg text-slate-600">
+                    A modern Next.js boilerplate with authentication, database,
+                    and deployment ready out of the box. Start building your app
+                    in minutes, not days.
+                </p>
+                <div className="flex items-center justify-center gap-4">
+                    <Link
+                        href={isAuthenticated ? "/dashboard" : "/signin"}
+                        className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-slate-800"
+                    >
+                        Get Started
+                        <ArrowRight className="h-4 w-4" />
+                    </Link>
+                    <a
+                        href="https://github.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-6 py-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+                    >
+                        View on GitHub
+                    </a>
+                </div>
+            </section>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+            {/* Features Section */}
+            <section className="container mx-auto px-6 py-16">
+                <h2 className="mb-12 text-center text-3xl font-bold text-slate-900">
+                    Everything you need to get started
+                </h2>
+                <div className="grid gap-6 md:grid-cols-3">
+                    <FeatureCard
+                        icon={Shield}
+                        title="Authentication Ready"
+                        description="Pre-configured NextAuth.js with Google OAuth. Add more providers in minutes with built-in session management."
+                    />
+                    <FeatureCard
+                        icon={Layers}
+                        title="Database & ORM"
+                        description="Prisma ORM with PostgreSQL adapter. Type-safe database queries with migrations and seeding support."
+                    />
+                    <FeatureCard
+                        icon={Zap}
+                        title="Modern Stack"
+                        description="Next.js 16, React 19, TypeScript, TailwindCSS, and Zustand. All the modern tools configured and ready."
+                    />
+                </div>
+            </section>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+            {/* Footer */}
+            <footer className="border-t border-slate-200 bg-white">
+                <div className="container mx-auto px-6 py-8 text-center text-sm text-slate-600">
+                    <p>
+                        Built with {APP_NAME} — A modern Next.js boilerplate
+                    </p>
+                </div>
+            </footer>
+        </main>
+    )
 }
